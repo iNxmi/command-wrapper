@@ -13,6 +13,8 @@ repositories {
 
 dependencies {
     implementation("net.dv8tion:JDA:6.2.0")
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
+    implementation("ch.qos.logback:logback-classic:1.5.18")
 }
 
 application {
