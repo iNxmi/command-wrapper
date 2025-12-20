@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture
 
 class BotCommand(val name: String, val command: List<String>) : ListenerAdapter() {
 
-    fun command() = Commands.slash(name, command.toString())
+    fun command() = Commands.slash(name, command.joinToString(" "))
 
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
         val startTime = System.currentTimeMillis()
