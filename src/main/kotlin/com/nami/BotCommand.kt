@@ -1,5 +1,6 @@
 package com.nami
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.interactions.commands.build.Commands
@@ -7,6 +8,8 @@ import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
 
 class BotCommand(val name: String, val command: List<String>) : ListenerAdapter() {
+
+    val log = KotlinLogging.logger {}
 
     fun command() = Commands.slash(name, command.joinToString(" "))
 
@@ -21,8 +24,15 @@ class BotCommand(val name: String, val command: List<String>) : ListenerAdapter(
 
         event.deferReply(true).queue()
 
+        val path = Path.of("/instances").resolve(instance.path)
+
+        log.info {
+            val user = event.user
+            val channel = event.channel
+            "User '${user.name}' (${user.id}) executed '/$name' in '${channel.name}' (${channel.id}). This resulted in executing '$command' in '$path'."
+        }
+
         CompletableFuture.runAsync {
-            val path = Path.of("/instances").resolve(instance.path)
             val process = ProcessBuilder(command)
                 .directory(path.toFile())
                 .start()
@@ -42,7 +52,7 @@ class BotCommand(val name: String, val command: List<String>) : ListenerAdapter(
                 if (System.currentTimeMillis() - lastUpdate >= 500) {
                     try {
                         val time = (System.currentTimeMillis() - startTime) / 1000.0
-                        val emoji = if(time.toInt() %2 == 0) "⏳" else "⌛"
+                        val emoji = if (time.toInt() % 2 == 0) "⏳" else "⌛"
 
                         val sb = StringBuilder()
                         sb.appendLine("$emoji ${time}s")

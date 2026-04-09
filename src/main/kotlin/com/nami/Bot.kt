@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.JDABuilder
 
 class Bot(val token: String) {
 
-    val commands = setOf(
+    private val commands = setOf(
 //        BotCommand("up", listOf("docker", "compose", "up", "-d")),
 //        BotCommand("down", listOf("docker", "compose", "down")),
 //        BotCommand("pwd", listOf("pwd"))
