@@ -21,6 +21,9 @@ RUN ./gradlew clean shadowJar -x test
 # -------- Run stage --------
 FROM eclipse-temurin:17-jre-alpine
 
+# Create /data directory with proper permissions
+RUN mkdir -p /data && chown -R 1000:1000 /data
+
 WORKDIR /app
 
 # Install Docker CLI + docker compose plugin

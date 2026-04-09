@@ -12,8 +12,9 @@
         </encoder>
     </appender>
 
-    <logger name="com.nami" level="DEBUG">
+    <logger name="com.nami" level="DEBUG" additivity="false">
         <appender-ref ref="APP_CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </logger>
     <appender name="APP_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
