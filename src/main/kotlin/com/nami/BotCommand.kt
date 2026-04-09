@@ -1,17 +1,15 @@
 package com.nami
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.interactions.commands.build.Commands
-import java.io.BufferedWriter
-import java.io.FileWriter
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.concurrent.CompletableFuture
 
 class BotCommand(val name: String, val command: List<String>) : ListenerAdapter() {
 
-    private val logFile = Paths.get("/data/log.txt").toFile()
+    val log = KotlinLogging.logger {}
 
     fun command() = Commands.slash(name, command.joinToString(" "))
 
@@ -29,10 +27,10 @@ class BotCommand(val name: String, val command: List<String>) : ListenerAdapter(
         val path = Path.of("/instances").resolve(instance.path)
 
         CompletableFuture.runAsync {
-            val user = event.user
-
-            logFile.parentFile?.mkdirs()
-            logFile.appendText("User '${user.name}' (${user.id}) executed '/$name' in '${channel.name}' (${channel.id}). This resulted in executing '$command' in '$path'.\n")
+            log.info {
+                val user = event.user
+                "User '${user.name}' (${user.id}) executed '/$name' in '${channel.name}' (${channel.id}). This resulted in executing '$command' in '$path'."
+            }
 
             val process = ProcessBuilder(command)
                 .directory(path.toFile())
